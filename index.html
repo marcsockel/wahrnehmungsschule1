@@ -12,7 +12,14 @@
         <meta name="mobile-web-app-capable" content="yes">
         <meta name="theme-color" content="#000000">
         <link rel="manifest" href="manifest.json">
-        <link rel="apple-touch-icon" href="icon-192.png">
+        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+        <script>
+          if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+              navigator.serviceWorker.register('sw.js');
+            });
+          }
+        </script>
         <style>
             body {
               background-color: black;
@@ -73,16 +80,11 @@
               }
             }
 
-            /* Touch-Gesten deaktivieren: kein Pinch-Zoom, kein Pull-to-Refresh */
-            * {
-                -webkit-touch-callout: none;
-                -webkit-user-select: none;
-                user-select: none;
-                touch-action: none;
-            }
             canvas {
                 touch-action: none;
-                -webkit-tap-highlight-color: transparent;
+                user-select: none;
+                -webkit-user-select: none;
+                -webkit-touch-callout: none;
             }
         </style>
     </head>
@@ -242,25 +244,6 @@ k.p.toString(16)+", data=0x"+p.toString(16)))}return m};t.L=function(a){this.j=a
         window.focus();
       }, true);
 
-      // Touch-Gesten: Pull-to-Refresh und Browser-Swipe-Navigation verhindern
-      document.addEventListener('touchmove', function(e) {
-        e.preventDefault();
-      }, { passive: false });
-      document.addEventListener('gesturestart', function(e) {
-        e.preventDefault();
-      }, { passive: false });
-      document.addEventListener('gesturechange', function(e) {
-        e.preventDefault();
-      }, { passive: false });
-
-      // Service Worker registrieren
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./sw.js').then(function(reg) {
-          console.log('Service Worker registriert:', reg.scope);
-        }).catch(function(err) {
-          console.log('Service Worker Fehler:', err);
-        });
-      }
     </script>
   </body>
 </html>
